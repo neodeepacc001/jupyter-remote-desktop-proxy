@@ -2,6 +2,16 @@ FROM quay.io/jupyter/base-notebook:2025-12-01
 
 USER root
 
+# Install wget first for downloading Chrome
+RUN apt-get -y -qq update \
+ && apt-get -y -qq install wget
+
+# Download and install Google Chrome
+RUN wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+ && apt-get -y -qq install /tmp/chrome.deb \
+ || apt-get -y -qq install -f \
+ && rm /tmp/chrome.deb
+
 RUN apt-get -y -qq update \
  && apt-get -y -qq install \
         dbus-x11 \
